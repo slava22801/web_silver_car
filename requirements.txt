@@ -1,2 +1,8 @@
 fastapi[standard]
 pymongo
+pyjwt[crypto]
+pathlib
+bcrypt
+python-multipart
+pydantic_settings
+motor
