@@ -9,7 +9,8 @@ def carEntity(item) -> dict:
         "gear":item["gear"],
         "rudder":item["rudder"],
         "carcase":item["carcase"],
-        "color":item["color"]
+        "color":item["color"],
+        "photo_path":item.get("photo_path", None)
     }
 
 def carsEntity(entity) -> list:

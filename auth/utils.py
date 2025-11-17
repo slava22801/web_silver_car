@@ -91,7 +91,7 @@ def hash_password(
 
 
 def validate_auth_user(
-    username: str = Form(),
+    email: str = Form(),
     password: str = Form()
 ):
     unauthed_exc = HTTPException(
@@ -102,18 +102,20 @@ def validate_auth_user(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Invalid password"
     )
-    if (user := db.users.find_one({"username": username})):
-        result = db.users.find_one({"username": username})
-        if password == {result.get('password')}:
-            raise unauthed_exc_psw
+    
+    user = db.users.find_one({"email": email})
+    
+    if not user:
+        raise unauthed_exc
+    
+    if password != user.get('password'):
+        raise unauthed_exc_psw
 
     # if not validate_password(
     #     password=password,
     #     hashed_password=user["password"],
     # ):
     #     raise unauthed_exc
-    # if password == {result.get('password')}:
-    #     raise unauthed_exc_psw
 
     
     # if not user.active:

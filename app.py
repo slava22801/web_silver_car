@@ -22,8 +22,12 @@ main.add_middleware(
     allow_headers=["*"],  # Разрешить все заголовки
 )
 
-# main.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+main.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 main.include_router(users_router)
 main.include_router(cars_router)
 main.include_router(admin_router)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app:main", host="0.0.0.0", port=8001, reload=True)
