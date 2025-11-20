@@ -22,6 +22,7 @@ async def add_user(user:UserSchema):
             "username": user_data["username"],
             "password": user_data["password"],
             "email": user_data["email"],
+            "role": user_data["role"]
          }
                         )
     
@@ -30,9 +31,10 @@ async def auth_user_issue_jwt(
     user: UserSchema = Depends(auth_utils.validate_auth_user),
 ):
     jwt_payload = {
-        "sub": user["username"],
+        "id": str(user["_id"]),
         "username": user["username"],
         "email": user["email"],
+        "role": user["role"],
     }
     token = auth_utils.encode_jwt(jwt_payload)
     return TokenInfo(

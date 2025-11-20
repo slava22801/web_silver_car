@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from routes.orders import orders_router
 from routes.users import users_router
 from routes.cars import cars_router
 from routes.admin import admin_router
@@ -27,6 +28,7 @@ main.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 main.include_router(users_router)
 main.include_router(cars_router)
 main.include_router(admin_router)
+main.include_router(orders_router)
 
 if __name__ == "__main__":
     import uvicorn

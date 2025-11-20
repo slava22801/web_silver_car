@@ -7,6 +7,8 @@ class UserSchema(BaseModel):
     username: str
     password: str
     email: EmailStr
+    role: str
+    orders: dict
     
     
 class TokenInfo(BaseModel):
@@ -24,3 +26,10 @@ class AutoInfo(BaseModel):
     rudder: str
     carcase: str
     color: str
+    
+class OrderInfo(BaseModel):
+    from_id: str
+    name: str
+    auto_name: str
+    number: str
+    comment: str
