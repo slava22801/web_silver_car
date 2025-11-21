@@ -6,7 +6,7 @@ from core.logger import log_system_event, log_error
 
 # Настройки SMTP для Gmail
 SMTP_SERVER = "smtp.gmail.com"
-SMTP_PORT = 587
+SMTP_PORT = 465
 EMAIL_FROM = "carsilver622@gmail.com"
 # ВАЖНО: Используйте пароль приложения (App Password), а не обычный пароль!
 # Как получить пароль приложения:

@@ -17,7 +17,11 @@ main.add_middleware(
         "http://127.0.0.1:3000",
         "http://localhost:5173", 
         "http://127.0.0.1:5173",
-    ],  # React dev server
+        "https://24silvercar.ru",
+        "https://www.24silvercar.ru",
+        "http://24silvercar.ru",
+        "http://www.24silvercar.ru",
+    ],  # React dev server и production домен
     allow_credentials=True,
     allow_methods=["*"],  # Разрешить все методы
     allow_headers=["*"],  # Разрешить все заголовки
