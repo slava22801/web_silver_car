@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: silver_car_api
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+      - ./keys:/app/keys
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MONGODB_URL=mongodb://mongodb:27017/
+      - MONGODB_DB_NAME=silver_car
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    networks:
+      - silver_car_network
+
+  mongodb:
+    image: mongo:7.0
+    container_name: silver_car_mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=silver_car
+    restart: unless-stopped
+    networks:
+      - silver_car_network
+
+volumes:
+  mongodb_data:
+
+networks:
+  silver_car_network:
+    driver: bridge
+

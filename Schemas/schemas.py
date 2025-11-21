@@ -7,8 +7,7 @@ class UserSchema(BaseModel):
     username: str
     password: str
     email: EmailStr
-    role: str
-    orders: dict
+    role: str = "user"
     
     
 class TokenInfo(BaseModel):
@@ -29,7 +28,21 @@ class AutoInfo(BaseModel):
     
 class OrderInfo(BaseModel):
     from_id: str
+    email: EmailStr
     name: str
     auto_name: str
     number: str
     comment: str
+    status: str = "В ожидании"
+
+class ChangePasswordSchema(BaseModel):
+    email: EmailStr
+    old_password: str
+    new_password: str
+
+class ForgotPasswordSchema(BaseModel):
+    email: EmailStr
+
+class ResetPasswordSchema(BaseModel):
+    token: str
+    new_password: str

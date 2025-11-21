@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# Логи
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Документация
+README.md
+*.md
+GMAIL_SETUP.md
+
+# Временные файлы
+*.tmp
+*.temp
+.DS_Store
+
+# Тесты
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node (если есть)
+node_modules/
+npm-debug.log
+
+# Другое
+*.db
+*.sqlite
+.env
+.env.local
+
