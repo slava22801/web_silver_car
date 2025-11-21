@@ -5,6 +5,7 @@ from routes.orders import orders_router
 from routes.users import users_router
 from routes.cars import cars_router
 from routes.admin import admin_router
+from routes.reviews import reviews_router
 
 
 
@@ -33,6 +34,7 @@ main.include_router(users_router)
 main.include_router(cars_router)
 main.include_router(admin_router)
 main.include_router(orders_router)
+main.include_router(reviews_router)
 
 if __name__ == "__main__":
     import uvicorn

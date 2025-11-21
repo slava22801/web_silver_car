@@ -60,40 +60,47 @@ def send_order_confirmation_email(to_email: str, order_data: dict) -> bool:
         msg.attach(MIMEText(body, 'plain', 'utf-8'))
         text = msg.as_string()
         
-        # Пытаемся подключиться через порт 465 (SSL)
-        # Если не получается, пробуем порт 587 (STARTTLS)
+        # Пытаемся подключиться через порт 587 (STARTTLS) - более надежный вариант
+        # Если не получается, пробуем порт 465 (SSL)
         server = None
+        last_error = None
+        
+        # Попытка 1: Порт 587 с STARTTLS (часто лучше работает за файрволами)
         try:
-            # Попытка 1: Порт 465 с SSL
-            server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL, timeout=SMTP_TIMEOUT)
+            server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT_STARTTLS, timeout=SMTP_TIMEOUT)
+            server.ehlo()  # Отправляем EHLO для начала SMTP сессии
+            server.starttls()  # Включаем TLS шифрование
+            server.ehlo()  # Отправляем EHLO снова после STARTTLS
             server.login(EMAIL_FROM, EMAIL_PASSWORD)
             server.sendmail(EMAIL_FROM, to_email, text)
             server.quit()
-            log_system_event("SEND_EMAIL", f"Order confirmation email sent successfully to {to_email} (port 465)")
+            log_system_event("SEND_EMAIL", f"Order confirmation email sent successfully to {to_email} (port 587)")
             return True
-        except (socket.timeout, smtplib.SMTPConnectError, smtplib.SMTPServerDisconnected, OSError) as e:
-            # Если порт 465 не работает, пробуем порт 587
+        except (socket.timeout, smtplib.SMTPConnectError, smtplib.SMTPServerDisconnected, OSError, Exception) as e:
+            last_error = e
             if server:
                 try:
                     server.quit()
                 except:
                     pass
+            server = None
+            # Попытка 2: Порт 465 с SSL
             try:
-                log_system_event("SEND_EMAIL", f"Port 465 failed, trying port 587: {str(e)}")
-                server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT_STARTTLS, timeout=SMTP_TIMEOUT)
-                server.starttls()
+                log_system_event("SEND_EMAIL", f"Port 587 failed, trying port 465: {str(e)}")
+                server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL, timeout=SMTP_TIMEOUT)
                 server.login(EMAIL_FROM, EMAIL_PASSWORD)
                 server.sendmail(EMAIL_FROM, to_email, text)
                 server.quit()
-                log_system_event("SEND_EMAIL", f"Order confirmation email sent successfully to {to_email} (port 587)")
+                log_system_event("SEND_EMAIL", f"Order confirmation email sent successfully to {to_email} (port 465)")
                 return True
             except Exception as e2:
+                last_error = e2
                 if server:
                     try:
                         server.quit()
                     except:
                         pass
-                raise e2
+                raise last_error
         
     except smtplib.SMTPAuthenticationError as e:
         error_msg = (
@@ -165,40 +172,47 @@ def send_password_reset_email(to_email: str, reset_token: str, username: str = N
         msg.attach(MIMEText(body, 'plain', 'utf-8'))
         text = msg.as_string()
         
-        # Пытаемся подключиться через порт 465 (SSL)
-        # Если не получается, пробуем порт 587 (STARTTLS)
+        # Пытаемся подключиться через порт 587 (STARTTLS) - более надежный вариант
+        # Если не получается, пробуем порт 465 (SSL)
         server = None
+        last_error = None
+        
+        # Попытка 1: Порт 587 с STARTTLS (часто лучше работает за файрволами)
         try:
-            # Попытка 1: Порт 465 с SSL
-            server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL, timeout=SMTP_TIMEOUT)
+            server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT_STARTTLS, timeout=SMTP_TIMEOUT)
+            server.ehlo()  # Отправляем EHLO для начала SMTP сессии
+            server.starttls()  # Включаем TLS шифрование
+            server.ehlo()  # Отправляем EHLO снова после STARTTLS
             server.login(EMAIL_FROM, EMAIL_PASSWORD)
             server.sendmail(EMAIL_FROM, to_email, text)
             server.quit()
-            log_system_event("SEND_EMAIL", f"Password reset email sent successfully to {to_email} (port 465)")
+            log_system_event("SEND_EMAIL", f"Password reset email sent successfully to {to_email} (port 587)")
             return True
-        except (socket.timeout, smtplib.SMTPConnectError, smtplib.SMTPServerDisconnected, OSError) as e:
-            # Если порт 465 не работает, пробуем порт 587
+        except (socket.timeout, smtplib.SMTPConnectError, smtplib.SMTPServerDisconnected, OSError, Exception) as e:
+            last_error = e
             if server:
                 try:
                     server.quit()
                 except:
                     pass
+            server = None
+            # Попытка 2: Порт 465 с SSL
             try:
-                log_system_event("SEND_EMAIL", f"Port 465 failed, trying port 587: {str(e)}")
-                server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT_STARTTLS, timeout=SMTP_TIMEOUT)
-                server.starttls()
+                log_system_event("SEND_EMAIL", f"Port 587 failed, trying port 465: {str(e)}")
+                server = smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT_SSL, timeout=SMTP_TIMEOUT)
                 server.login(EMAIL_FROM, EMAIL_PASSWORD)
                 server.sendmail(EMAIL_FROM, to_email, text)
                 server.quit()
-                log_system_event("SEND_EMAIL", f"Password reset email sent successfully to {to_email} (port 587)")
+                log_system_event("SEND_EMAIL", f"Password reset email sent successfully to {to_email} (port 465)")
                 return True
             except Exception as e2:
+                last_error = e2
                 if server:
                     try:
                         server.quit()
                     except:
                         pass
-                raise e2
+                raise last_error
         
     except smtplib.SMTPAuthenticationError as e:
         error_msg = (

@@ -46,3 +46,10 @@ class ForgotPasswordSchema(BaseModel):
 class ResetPasswordSchema(BaseModel):
     token: str
     new_password: str
+
+class ReviewInfo(BaseModel):
+    name: str
+    email: EmailStr
+    rating: int
+    comment: str
+    consent: bool
